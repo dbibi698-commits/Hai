@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Settings · BG Remover{% endblock %}
+
+{% block content %}
+<section class="intro">
+  <h1>Settings</h1>
+  <p>Your remove.bg key is saved in settings.json beside this app, so it stays after you restart.</p>
+</section>
+
+<form class="card" method="post" action="{{ url_for('settings_page') }}" autocomplete="off">
+  <h2>remove.bg API key</h2>
+  <label class="field">
+    <span>New key</span>
+    <input type="password" name="api_key" placeholder="Paste your key" spellcheck="false" autocomplete="off">
+  </label>
+  <p class="hint">
+    {% if masked_key %}
+      A key is saved ({{ masked_key }}). Paste a new one to replace it.
+    {% else %}
+      No key saved yet. Create one at remove.bg, then paste it here.
+    {% endif %}
+  </p>
+  <label class="toggle">
+    <input type="checkbox" name="clear_key">
+    <span>Remove the saved key</span>
+  </label>
+  <div>
+    <button type="submit" class="primary">Save settings</button>
+  </div>
+</form>
+
+<section class="card">
+  <h2>Move your settings</h2>
+  <p class="hint">Export a backup, or import one on another computer. The file contains your key, so keep it private.</p>
+  <div class="row">
+    <a class="button" href="{{ url_for('export_settings') }}">Export settings</a>
+  </div>
+  <form class="row" method="post" action="{{ url_for('import_settings') }}" enctype="multipart/form-data">
+    <input type="file" name="settings_file" accept=".json,application/json" required>
+    <button type="submit">Import settings</button>
+  </form>
+</section>
+{% endblock %}
